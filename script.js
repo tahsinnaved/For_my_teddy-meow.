@@ -26,14 +26,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.getElementById('musicToggle');
   let playing = false;
 
-  if (toggle && bgm) {
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      playing ? bgm.pause() : bgm.play();
-      toggle.textContent = playing ? '🔈' : '🔊';
-      playing = !playing;
-    });
-  }
+if (toggle && bgm) {
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+
+    if (playing) {
+      bgm.pause();
+    } else {
+      bgm.volume = 0.25;
+      bgm.play();
+    }
+
+    toggle.textContent = playing ? '🔈' : '🔊';
+    playing = !playing;
+  });
+}
 
   /* ---------------- Heart Rain ---------------- */
   const name = document.getElementById('name');
