@@ -106,12 +106,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   yesBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    proposalResponse("She said YES 💖\nAmi shotti lucky, Lokkhi.");
+    proposalResponse("She said YES 💖\nYou will never regret saying Yes!.");
   });
 
   alwaysBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    proposalResponse("Always… 🥺💛\nEi word ta amar shob.");
+    proposalResponse(" 🥺💛 \nI lovee youu babyyy.");
   });
 
   /* ---------------- Lokkhi Scene ---------------- */
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function revealLokkhi() {
     typeWriter(
       lokkhiScene.querySelector('.text'),
-      "Lokkhi mane bhalo mon, shanto, pure…\nAar sheta tumi, Oishi 💛",
+      "You are everything i ever dreamed of, my dream girlll.\n Stay mine till death do us part",
       50
     );
   }
