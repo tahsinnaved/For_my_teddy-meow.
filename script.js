@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let index = 0;
   let pressTimer = null;
 
+  /* ---------------- Scene Control ---------------- */
   function showScene(i) {
     scenes.forEach(s => s.classList.remove('active'));
     scenes[i].classList.add('active');
@@ -12,27 +13,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.body.addEventListener('click', (e) => {
     if (e.target.closest('button') || e.target.id === 'musicToggle') return;
-    index = (index + 1) % scenes.length;
-    showScene(index);
+    nextScene();
   });
 
-  /* Music */
+  function nextScene() {
+    index = Math.min(index + 1, scenes.length - 1);
+    showScene(index);
+  }
+
+  /* ---------------- Music ---------------- */
   const bgm = document.getElementById('bgm');
   const toggle = document.getElementById('musicToggle');
   let playing = false;
 
-  toggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    playing ? bgm.pause() : bgm.play();
-    toggle.textContent = playing ? '🔈' : '🔊';
-    playing = !playing;
-  });
+  if (toggle && bgm) {
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      playing ? bgm.pause() : bgm.play();
+      toggle.textContent = playing ? '🔈' : '🔊';
+      playing = !playing;
+    });
+  }
 
-  /* Heart rain */
+  /* ---------------- Heart Rain ---------------- */
   const name = document.getElementById('name');
   let lastTap = 0;
 
-  name.addEventListener('click', () => heartRain());
+  name.addEventListener('click', heartRain);
   name.addEventListener('touchend', () => {
     const now = Date.now();
     if (now - lastTap < 300) heartRain();
@@ -40,37 +47,98 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function heartRain() {
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 18; i++) {
       const h = document.createElement('div');
       h.className = 'heart';
       h.textContent = '💖';
       h.style.left = Math.random() * 100 + 'vw';
       h.style.bottom = '0';
-      h.style.fontSize = Math.random() * 30 + 20 + 'px';
+      h.style.fontSize = Math.random() * 28 + 18 + 'px';
       document.body.appendChild(h);
-      setTimeout(() => h.remove(), 2000);
+
+      const duration = Math.random() * 1500 + 2000;
+      h.animate(
+        [
+          { transform: 'translateY(0)', opacity: 1 },
+          { transform: `translateY(-${200 + Math.random() * 200}px)`, opacity: 0 }
+        ],
+        { duration, easing: 'ease-out' }
+      );
+
+      setTimeout(() => h.remove(), duration);
     }
   }
 
-  /* Lokkhi */
+  /* ---------------- Proposal Buttons ---------------- */
+  const yesBtn = document.querySelector('.yes-btn');
+  const alwaysBtn = document.querySelector('.always-btn');
+
+  function proposalResponse(message) {
+    setTimeout(() => {
+      alert(message);
+      celebrate();
+      setTimeout(nextScene, 900); // ✅ AUTO MOVE FORWARD
+    }, 400);
+  }
+
+  function celebrate() {
+    for (let i = 0; i < 25; i++) {
+      const h = document.createElement('div');
+      h.className = 'heart';
+      h.textContent = '💛';
+      h.style.left = Math.random() * 100 + 'vw';
+      h.style.bottom = '0';
+      h.style.fontSize = Math.random() * 30 + 20 + 'px';
+      document.body.appendChild(h);
+
+      const duration = Math.random() * 1500 + 2000;
+      h.animate(
+        [
+          { transform: 'translateY(0)', opacity: 1 },
+          { transform: `translateY(-${300 + Math.random() * 200}px)`, opacity: 0 }
+        ],
+        { duration }
+      );
+
+      setTimeout(() => h.remove(), duration);
+    }
+  }
+
+  yesBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    proposalResponse("She said YES 💖\nAmi shotti lucky, Lokkhi.");
+  });
+
+  alwaysBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    proposalResponse("Always… 🥺💛\nEi word ta amar shob.");
+  });
+
+  /* ---------------- Lokkhi Scene ---------------- */
   const lokkhiScene = document.getElementById('lokkhiScene');
+
   lokkhiScene.addEventListener('dblclick', revealLokkhi);
-  lokkhiScene.addEventListener('mousedown', () => pressTimer = setTimeout(revealLokkhi, 600));
+  lokkhiScene.addEventListener('mousedown', () => {
+    pressTimer = setTimeout(revealLokkhi, 600);
+  });
   lokkhiScene.addEventListener('mouseup', () => clearTimeout(pressTimer));
 
   function revealLokkhi() {
-    typeWriter(lokkhiScene.querySelector('.text'),
-      "Lokkhi mane bhalo mon, shanto, pure…\nAar sheta tumi, Oishi 💛", 50);
+    typeWriter(
+      lokkhiScene.querySelector('.text'),
+      "Lokkhi mane bhalo mon, shanto, pure…\nAar sheta tumi, Oishi 💛",
+      50
+    );
   }
 
-  /* Hug */
+  /* ---------------- Hug ---------------- */
   const hugScene = document.getElementById('hugScene');
   hugScene.addEventListener('click', () => {
     hugScene.classList.add('hug');
     setTimeout(() => hugScene.classList.remove('hug'), 600);
   });
 
-  /* Teddy */
+  /* ---------------- Teddy ---------------- */
   const teddyScene = document.getElementById('teddyScene');
   teddyScene.addEventListener('mousedown', () => {
     pressTimer = setTimeout(() => {
@@ -79,17 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   teddyScene.addEventListener('mouseup', () => clearTimeout(pressTimer));
 
-  /* Proposal buttons */
-  document.querySelector('.yes-btn').addEventListener('click', (e) => {
-    e.stopPropagation();
-    alert("She said YES 💖\nAmi shotti lucky, Lokkhi.");
-  });
-
-  document.querySelector('.always-btn').addEventListener('click', (e) => {
-    e.stopPropagation();
-    alert("Always… 🥺💛\nEi word ta amar shob.");
-  });
-
+  /* ---------------- Typing Effect ---------------- */
   function typeWriter(el, text, speed) {
     el.innerHTML = '';
     let i = 0;
@@ -103,3 +161,4 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 });
+
