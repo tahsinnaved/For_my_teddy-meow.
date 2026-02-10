@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const teddyScene = document.getElementById('teddyScene');
   teddyScene.addEventListener('mousedown', () => {
     pressTimer = setTimeout(() => {
-      alert("Ami shotti try kori, Lokkhi. Tumi amar shob. 🧸💛");
+      alert("I try my best baby, sometimes it shows up, sonetimes it does not. I love you no matter what...🧸💛");
     }, 700);
   });
   teddyScene.addEventListener('mouseup', () => clearTimeout(pressTimer));
